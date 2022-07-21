@@ -21,15 +21,16 @@ write_api = client.write_api(write_options=SYNCHRONOUS)
 
 # get tomorrow
 dt = datetime.now() + timedelta(days=1)
-tom = dt.strftime("%d%b%y").upper()
+#tom = dt.strftime("%d%b%y").upper()
+expiry = os.getenv('EXPIRY')
 
 # 21JUL22
 # get strike
 strike = int(os.getenv('STRIKE'))
 #################################################################
 chans = [
-    f'ticker.BTC-{tom}-{strike}-C.100ms',
-    f'ticker.BTC-{tom}-{strike}-P.100ms',
+    f'ticker.BTC-{expiry}-{strike}-C.100ms',
+    f'ticker.BTC-{expiry}-{strike}-P.100ms',
 ]
 msgSub = \
     {
