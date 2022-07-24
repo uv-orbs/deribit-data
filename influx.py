@@ -15,7 +15,7 @@ write_api = client.write_api(write_options=SYNCHRONOUS)
 
 
 def get_influx_client():
-    return client
+    return influxdb_client
 
 
 def get_influx_write_api():

@@ -10,7 +10,7 @@ api_secret = os.getenv('BINANCE_API_SEC')
 
 
 def send_data_point(price):
-    p = get_influx_client().db_client.Point("spot").tag(
+    p = get_influx_client().Point("spot").tag(
         "version", "dev1.1").tag("exchange", "binance").tag("pair", "BTCUSDT")
 
     p.field("price", price)
