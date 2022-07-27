@@ -16,10 +16,13 @@ expiry = os.getenv('EXPIRY')
 # get strike
 strike = int(os.getenv('STRIKE'))
 #################################################################
-chans = [
-    f'ticker.BTC-{expiry}-{strike}-C.100ms',
-    f'ticker.BTC-{expiry}-{strike}-P.100ms',
-]
+chans = []
+strike = 10000
+while strike < 50000:
+    chans.append(f'ticker.BTC-{expiry}-{strike}-C.100ms')
+    chans.append(f'ticker.BTC-{expiry}-{strike}-P.100ms')
+    strike += 500
+
 msgSub = \
     {
         "jsonrpc": "2.0",
