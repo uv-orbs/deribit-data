@@ -1,7 +1,8 @@
+import re
+import os
+import json
 import asyncio
 import websockets
-import json
-import os
 from collections.abc import MutableMapping
 from datetime import datetime, timedelta
 from influx import get_influx_client, get_influx_write_api
@@ -21,7 +22,7 @@ strike = 10000
 while strike < 50000:
     chans.append(f'ticker.BTC-{expiry}-{strike}-C.100ms')
     chans.append(f'ticker.BTC-{expiry}-{strike}-P.100ms')
-    strike += 500
+    strike += 1000
 
 msgSub = \
     {
@@ -48,11 +49,17 @@ def flatten_dict(d: MutableMapping, parent_key: str = '', sep: str = '.') -> Mut
 def create_data_point(data):
     p = get_influx_client().Point("options").tag("version", "dev1.1")
     flat = flatten_dict(data)
+
     for f in flat:
         if isinstance(flat[f], str):
             p = p.tag(f, flat[f])
         elif type(flat[f]) == int or type(flat[f]) == float:
             p = p.field(f, flat[f])
+
+    # add strike price
+    strike_price = re.search(
+        '.*?-.*?-(.*)-[CP]', flat['instrument_name']).group(1)
+    p = p.field('strike_price', int(strike_price))
 
     return p
 
